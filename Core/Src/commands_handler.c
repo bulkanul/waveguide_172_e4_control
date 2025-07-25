@@ -2,13 +2,11 @@
 #include "../Inc/gitcommit.h"
 
 #ifndef TB_DEF
-GPIO_TypeDef *relay_gpio[] = {RELAY1_GPIO_Port,RELAY2_GPIO_Port,RELAY3_GPIO_Port,RELAY4_GPIO_Port};
-uint16_t relay_pin[] = {RELAY1_Pin,RELAY2_Pin,RELAY3_Pin,RELAY4_Pin};
-GPIO_TypeDef *lamp_gpio[] = {LAMP1_GPIO_Port,LAMP2_GPIO_Port,LAMP3_GPIO_Port};
-uint16_t lamp_pin[] = {LAMP1_Pin,LAMP2_Pin,LAMP3_Pin};
-// for doors order is reversed because of on board silk paint
-GPIO_TypeDef *door_gpio[] = {DOOR9_GPIO_Port,DOOR8_GPIO_Port,DOOR7_GPIO_Port,DOOR6_GPIO_Port,DOOR5_GPIO_Port,DOOR4_GPIO_Port,DOOR3_GPIO_Port,DOOR2_GPIO_Port,DOOR1_GPIO_Port};
-uint16_t door_pin[] = {DOOR9_Pin,DOOR8_Pin,DOOR7_Pin,DOOR6_Pin,DOOR5_Pin,DOOR4_Pin,DOOR3_Pin,DOOR2_Pin,DOOR1_Pin};
+GPIO_TypeDef *relay_gpio[RELAY_COUNT] = { RELAY1_GPIO_Port, RELAY2_GPIO_Port, RELAY3_GPIO_Port, RELAY4_GPIO_Port, RELAY5_GPIO_Port };
+uint16_t relay_pin[RELAY_COUNT] = { RELAY1_Pin, RELAY2_Pin, RELAY3_Pin, RELAY4_Pin, RELAY5_Pin};
+
+GPIO_TypeDef *lamp_gpio[LAMP_COUNT] = { Lamp_FL_GPIO_Port, Lamp_BL_GPIO_Port, Lamp_PL_GPIO_Port };
+uint16_t lamp_pin[LAMP_COUNT] = { Lamp_FL_Pin, Lamp_BL_Pin, Lamp_PL_Pin };
 #endif
 
 static void common_command(device_struct *mcs, char *resp, char *debug_buffer, char *tcp_buffer, int i);
@@ -96,7 +94,7 @@ void common_command(device_struct *mcs, char *resp, char *debug_buffer, char *tc
 	if (id != -1) {
 		int i_val;
 		int index;
-		if (cmd("lgstatus comm")){
+		if (cmd("lgstatus comm")) {
 			sprintf(resp, "lrstatus comm %i", id);
 			sprintf(resp + strlen(resp), " %i",alarm->key);
 			sprintf(resp + strlen(resp), " %i",alarm->emergency);
@@ -113,33 +111,42 @@ void common_command(device_struct *mcs, char *resp, char *debug_buffer, char *tc
 		else if(cmd("lsrelay comm"))
 		{
 			rd("lsrelay comm %i %i %i\r", &id, &index, &i_val);
+
 			err += (index < 0 || index >= RELAY_COUNT);
-			err += (i_val < 0 || i_val > 1);
-			if(!err){
-				HAL_GPIO_WritePin(relay_gpio[index],relay_pin[index],i_val);
+			err += (i_val != 0 && i_val != 1);
+
+			if (err == 0) {
+				HAL_GPIO_WritePin (relay_gpio[index], relay_pin[index], i_val == 0 ? GPIO_PIN_RESET : GPIO_PIN_SET);
 				state->relay[index] = i_val;
 			}
+
 			response("lrrelay comm %i %i %i\r", id, index, i_val);
 		}
 		else if(cmd("lslamp comm"))
 		{
 			rd("lslamp comm %i %i %i\r", &id, &index, &i_val);
+
 			err += (index < 0 || index >= LAMP_COUNT);
-			err += (i_val < 0 || i_val > 1);
-			if(!err)			{
-				HAL_GPIO_WritePin(lamp_gpio[index],lamp_pin[index],i_val);
+			err += (i_val != 0 && i_val != 1);
+
+			if (err == 0) {
+				HAL_GPIO_WritePin (lamp_gpio[index], lamp_pin[index], i_val == 0 ? GPIO_PIN_RESET : GPIO_PIN_SET);
 				state->lamp[index] = i_val;
 			}
+
 			response("lrlamp comm %i %i %i\r", id, index, i_val);
 		}
 		else if(cmd("lslaser comm"))
 		{
 			rd("lslaser comm %i %i\r", &id, &i_val);
-			err += (i_val < 0 || i_val > 1);
-			if(!err) {
-				HAL_GPIO_WritePin(TRIGGER_SCAN_ACT_GPIO_Port,TRIGGER_SCAN_ACT_Pin,i_val);
+
+			err += (i_val != 0 && i_val != 1);
+
+			if(err == 0) {
+				HAL_GPIO_WritePin (TRIGGER_SCAN_ACT_GPIO_Port, TRIGGER_SCAN_ACT_Pin, i_val == 0 ? GPIO_PIN_RESET : GPIO_PIN_SET);
 				state->laser_controller = i_val;
 			}
+
 			response("lrlaser comm %i %i\r", id, i_val);
 		}
 		else if(cmd("lslasstat comm"))

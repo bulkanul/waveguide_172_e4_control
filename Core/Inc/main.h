@@ -7,13 +7,12 @@
   ******************************************************************************
   * @attention
   *
-  * <h2><center>&copy; Copyright (c) 2020 STMicroelectronics.
-  * All rights reserved.</center></h2>
+  * Copyright (c) 2025 STMicroelectronics.
+  * All rights reserved.
   *
-  * This software component is licensed by ST under BSD 3-Clause license,
-  * the "License"; You may not use this file except in compliance with the
-  * License. You may obtain a copy of the License at:
-  *                        opensource.org/licenses/BSD-3-Clause
+  * This software is licensed under terms that can be found in the LICENSE file
+  * in the root directory of this software component.
+  * If no LICENSE file comes with this software, it is provided AS-IS.
   *
   ******************************************************************************
   */
@@ -32,12 +31,12 @@ extern "C" {
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
-//#define FDCAN
 
 /* USER CODE END Includes */
 
 /* Exported types ------------------------------------------------------------*/
 /* USER CODE BEGIN ET */
+
 /* USER CODE END ET */
 
 /* Exported constants --------------------------------------------------------*/
@@ -47,12 +46,6 @@ extern "C" {
 
 /* Exported macro ------------------------------------------------------------*/
 /* USER CODE BEGIN EM */
-#ifndef FDCAN
-  #define CAN_TYPE CAN_HandleTypeDef
-#else
-  #define CAN_TYPE FDCAN_HandleTypeDef
-#endif
-
 
 /* USER CODE END EM */
 
@@ -60,21 +53,10 @@ extern "C" {
 void Error_Handler(void);
 
 /* USER CODE BEGIN EFP */
+
 /* USER CODE END EFP */
 
 /* Private defines -----------------------------------------------------------*/
-#define DOOR9_Pin GPIO_PIN_0
-#define DOOR9_GPIO_Port GPIOF
-#define DOOR8_Pin GPIO_PIN_1
-#define DOOR8_GPIO_Port GPIOF
-#define DOOR7_Pin GPIO_PIN_2
-#define DOOR7_GPIO_Port GPIOF
-#define DOOR6_Pin GPIO_PIN_3
-#define DOOR6_GPIO_Port GPIOF
-#define DOOR5_Pin GPIO_PIN_4
-#define DOOR5_GPIO_Port GPIOF
-#define DOOR4_Pin GPIO_PIN_5
-#define DOOR4_GPIO_Port GPIOF
 #define DOOR3_Pin GPIO_PIN_6
 #define DOOR3_GPIO_Port GPIOF
 #define DOOR2_Pin GPIO_PIN_7
@@ -93,12 +75,14 @@ void Error_Handler(void);
 #define RELAY3_GPIO_Port GPIOE
 #define RELAY4_Pin GPIO_PIN_11
 #define RELAY4_GPIO_Port GPIOE
-#define LAMP1_Pin GPIO_PIN_12
-#define LAMP1_GPIO_Port GPIOE
-#define LAMP2_Pin GPIO_PIN_13
-#define LAMP2_GPIO_Port GPIOE
-#define LAMP3_Pin GPIO_PIN_14
-#define LAMP3_GPIO_Port GPIOE
+#define RELAY5_Pin GPIO_PIN_12
+#define RELAY5_GPIO_Port GPIOE
+#define Button_PL_Pin GPIO_PIN_13
+#define Button_PL_GPIO_Port GPIOE
+#define Button_BL_Pin GPIO_PIN_14
+#define Button_BL_GPIO_Port GPIOE
+#define Button_FL_Pin GPIO_PIN_15
+#define Button_FL_GPIO_Port GPIOE
 #define TRIGGER_SCAN_ACT_Pin GPIO_PIN_12
 #define TRIGGER_SCAN_ACT_GPIO_Port GPIOB
 #define LED_POWER_Pin GPIO_PIN_9
@@ -107,10 +91,20 @@ void Error_Handler(void);
 #define LED_EMISSION_GPIO_Port GPIOD
 #define LED_ERROR_Pin GPIO_PIN_11
 #define LED_ERROR_GPIO_Port GPIOD
+#define OUT1_Pin GPIO_PIN_12
+#define OUT1_GPIO_Port GPIOD
+#define OUT2_Pin GPIO_PIN_13
+#define OUT2_GPIO_Port GPIOD
 #define LED_YELLOW_Pin GPIO_PIN_14
 #define LED_YELLOW_GPIO_Port GPIOD
 #define LED_GREEN_Pin GPIO_PIN_15
 #define LED_GREEN_GPIO_Port GPIOD
+#define Lamp_PL_Pin GPIO_PIN_7
+#define Lamp_PL_GPIO_Port GPIOC
+#define Lamp_BL_Pin GPIO_PIN_8
+#define Lamp_BL_GPIO_Port GPIOC
+#define Lamp_FL_Pin GPIO_PIN_9
+#define Lamp_FL_GPIO_Port GPIOC
 #define PROTECTION_ONOFF_Pin GPIO_PIN_3
 #define PROTECTION_ONOFF_GPIO_Port GPIOD
 

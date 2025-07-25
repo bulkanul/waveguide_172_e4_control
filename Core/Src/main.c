@@ -68,12 +68,6 @@ int main(void)
 {
 
   /* USER CODE BEGIN 1 */
-	//initialise_monitor_handles();
-	//printf("Start\n");
-//	setvbuf(stdin, NULL, _IONBF, 0);
-//	setvbuf(stdout, NULL, _IONBF, 0);
-//	setvbuf(stderr, NULL, _IONBF, 0);
-
   /* USER CODE END 1 */
 
   /* MCU Configuration--------------------------------------------------------*/

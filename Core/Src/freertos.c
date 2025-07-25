@@ -115,53 +115,53 @@ void vApplicationGetIdleTaskMemory( StaticTask_t **ppxIdleTaskTCBBuffer, StackTy
   * @retval None
   */
 void MX_FREERTOS_Init(void) {
-	/* USER CODE BEGIN Init */
+  /* USER CODE BEGIN Init */
 
 	read_last_config_data ( &mcs_storage.config ) ;
-	/* USER CODE END Init */
-	/* Create the mutex(es) */
-	/* definition and creation of CanMutex */
-	osMutexDef(CanMutex);
-	CanMutexHandle = osMutexCreate(osMutex(CanMutex));
+  /* USER CODE END Init */
+  /* Create the mutex(es) */
+  /* definition and creation of CanMutex */
+  osMutexDef(CanMutex);
+  CanMutexHandle = osMutexCreate(osMutex(CanMutex));
 
-	/* USER CODE BEGIN RTOS_MUTEX */
-	/* USER CODE END RTOS_MUTEX */
+  /* USER CODE BEGIN RTOS_MUTEX */
+  /* USER CODE END RTOS_MUTEX */
 
-	/* USER CODE BEGIN RTOS_SEMAPHORES */
-	/* USER CODE END RTOS_SEMAPHORES */
+  /* USER CODE BEGIN RTOS_SEMAPHORES */
+  /* USER CODE END RTOS_SEMAPHORES */
 
-	/* USER CODE BEGIN RTOS_TIMERS */
-	/* USER CODE END RTOS_TIMERS */
+  /* USER CODE BEGIN RTOS_TIMERS */
+  /* USER CODE END RTOS_TIMERS */
 
-	/* USER CODE BEGIN RTOS_QUEUES */
+  /* USER CODE BEGIN RTOS_QUEUES */
 	link_queue         = xQueueCreate(5,sizeof(uint8_t));
 	indication_queue   = xQueueCreate(20, sizeof(uint8_t));
 	tcp_rx_data_queue  = xQueueCreate(TCP_QUEUE_BUF_SIZE, sizeof(char));
 
-	/* USER CODE END RTOS_QUEUES */
+  /* USER CODE END RTOS_QUEUES */
 
-	/* Create the thread(s) */
-	/* definition and creation of main_task */
-	osThreadStaticDef(main_task, h_main_task, osPriorityNormal, 0, 2048, main_taskBuffer, &main_taskControlBlock);
-	main_taskHandle = osThreadCreate(osThread(main_task), NULL);
+  /* Create the thread(s) */
+  /* definition and creation of main_task */
+  osThreadStaticDef(main_task, h_main_task, osPriorityNormal, 0, 2048, main_taskBuffer, &main_taskControlBlock);
+  main_taskHandle = osThreadCreate(osThread(main_task), NULL);
 
-	/* definition and creation of indi_task */
-	osThreadStaticDef(indi_task, h_indi_task, osPriorityNormal, 0, 256, indi_taskBuffer, &indi_taskControlBlock);
-	indi_taskHandle = osThreadCreate(osThread(indi_task), NULL);
+  /* definition and creation of indi_task */
+  osThreadStaticDef(indi_task, h_indi_task, osPriorityNormal, 0, 256, indi_taskBuffer, &indi_taskControlBlock);
+  indi_taskHandle = osThreadCreate(osThread(indi_task), NULL);
 
-	/* definition and creation of server_task */
-	osThreadStaticDef(server_task, h_server_task, osPriorityIdle, 0, 2048, server_taskBuffer, &server_taskControlBlock);
-	server_taskHandle = osThreadCreate(osThread(server_task), NULL);
+  /* definition and creation of server_task */
+  osThreadStaticDef(server_task, h_server_task, osPriorityIdle, 0, 2048, server_taskBuffer, &server_taskControlBlock);
+  server_taskHandle = osThreadCreate(osThread(server_task), NULL);
 
-	/* definition and creation of toolsTask */
-	osThreadDef(toolsTask, h_tools, osPriorityIdle, 0, 512);
-	toolsTaskHandle = osThreadCreate(osThread(toolsTask), NULL);
+  /* definition and creation of toolsTask */
+  osThreadDef(toolsTask, h_tools, osPriorityIdle, 0, 512);
+  toolsTaskHandle = osThreadCreate(osThread(toolsTask), NULL);
 
-	/* USER CODE BEGIN RTOS_THREADS */
+  /* USER CODE BEGIN RTOS_THREADS */
 	osThreadSuspend(server_taskHandle);
 	osThreadSuspend(indi_taskHandle);
 	osThreadSuspend(toolsTaskHandle);
-	/* USER CODE END RTOS_THREADS */
+  /* USER CODE END RTOS_THREADS */
 
 }
 
@@ -169,9 +169,9 @@ void MX_FREERTOS_Init(void) {
 /* USER CODE END Header_h_main_task */
 void h_main_task(void const * argument)
 {
-	/* init code for LWIP */
-	MX_LWIP_Init();
-	/* USER CODE BEGIN h_main_task */
+  /* init code for LWIP */
+  MX_LWIP_Init();
+  /* USER CODE BEGIN h_main_task */
 	device_struct *mcs = &mcs_storage;
 
 	char debug_buffer[1000];
@@ -223,38 +223,38 @@ void h_main_task(void const * argument)
 		}
 		mcs->current_interface = get_interface_in();
 	}
-	/* USER CODE END h_main_task */
+  /* USER CODE END h_main_task */
 }
 
 /* USER CODE BEGIN Header_h_indi_task */
 /* USER CODE END Header_h_indi_task */
 void h_indi_task(void const * argument)
 {
-	/* USER CODE BEGIN h_indi_task */
+  /* USER CODE BEGIN h_indi_task */
 	indication_handler(&indication_queue,&mcs_storage);
-	/* USER CODE END h_indi_task */
+  /* USER CODE END h_indi_task */
 }
 
 /* USER CODE BEGIN Header_h_server_task */
 /* USER CODE END Header_h_server_task */
 void h_server_task(void const * argument)
 {
-	/* USER CODE BEGIN h_server_task */
+  /* USER CODE BEGIN h_server_task */
 	server_handler(&tcp_rx_data_queue,&indication_queue);
-	/* USER CODE END h_server_task */
+  /* USER CODE END h_server_task */
 }
 
 /* USER CODE BEGIN Header_h_tools */
 /* USER CODE END Header_h_tools */
 void h_tools(void const * argument)
 {
-	/* USER CODE BEGIN h_tools */
+  /* USER CODE BEGIN h_tools */
 	/* Infinite loop */
 	for (;;) {
 		handler_alarm(&mcs_storage);
 		osDelay(1);
 	}
-	/* USER CODE END h_tools */
+  /* USER CODE END h_tools */
 }
 
 /* Private application code --------------------------------------------------*/

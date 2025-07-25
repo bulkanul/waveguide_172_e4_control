@@ -3,9 +3,9 @@
 
 #define PROTOCOL_VERSION "FSLS-2WL-Control-260225\r"
 
-#define RELAY_COUNT		4
-#define LAMP_COUNT		3
-#define DOOR_COUNT		9
+#define RELAY_COUNT		(5)
+#define LAMP_COUNT		(3)
+#define DOOR_COUNT		(3)
 
 #ifndef __cplusplus
 	#define true 1

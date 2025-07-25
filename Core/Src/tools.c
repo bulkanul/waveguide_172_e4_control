@@ -4,6 +4,7 @@
 #include "../Inc/main.h"
 #include "FreeRTOS.h"
 #include "math.h"
+#include "hardware.h"
 
 #define THRESHOLD_FREQ 1000
 #define DCDC1_DIODE_TRESHOLD_VALUE 0.6
@@ -143,10 +144,11 @@ int door[DOOR_COUNT];
 void handler_alarm(device_struct* mcs){
 	alarm_struct *alarm = &mcs->alarms;
 #ifndef TB_DEF
-	alarm->key = !((KEY_GPIO_Port->IDR & KEY_Pin)!=0);
-	alarm->emergency = !((EMERGENCY_GPIO_Port->IDR & EMERGENCY_Pin)!=0);
-	for(int i = 0; i < DOOR_COUNT; i ++)
-		alarm->door[i] = !((door_gpio[i]->IDR & door_pin[i])!=0);
+	alarm->key = is_alarm_key();
+	alarm->emergency = is_alarm_emergency();
+	alarm->door[0] = !is_door1_change_level();
+	alarm->door[1] = !is_door2_change_level();
+	alarm->door[2] = !is_door3_change_level();
 #else
 	alarm->key = key;
 	alarm->emergency = emergency;
