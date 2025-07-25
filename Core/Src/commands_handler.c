@@ -109,6 +109,8 @@ void common_command(device_struct *mcs, char *resp, char *debug_buffer, char *tc
 			sprintf(resp + strlen(resp), " %i",state->laser_controller);
 			for(int i = 0; i < BUTTON_COUNT; i ++)
 				sprintf(resp + strlen(resp), " %i",state->buttons[i]);
+			for(int i = 0; i < OUT_COUNT; i ++)
+				sprintf(resp + strlen(resp), " %i",state->out[i]);
 			sprintf(resp + strlen(resp), "\r");
 		}
 		else if(cmd("lsrelay comm"))
@@ -179,6 +181,24 @@ void common_command(device_struct *mcs, char *resp, char *debug_buffer, char *tc
 				protection_set_state(state, i_val);
 
 			response("lrprot comm %i %i\r", id, i_val);
+		}
+		else if(cmd("lsout comm"))
+		{
+			int out1_flag, out2_flag;
+			rd("lsout comm %i %i %i\r", &id, &out1_flag, &out2_flag);
+
+			err += (out1_flag != 0 && out1_flag != 1);
+			err += (out2_flag != 0 && out2_flag != 1);
+
+			if (err == 0) {
+				out1_flag == 0 ? out1_off () : out1_on ();
+				out2_flag == 0 ? out2_off () : out2_on ();
+
+				state->out[0] = out1_flag;
+				state->out[1] = out2_flag;
+			}
+
+			response("lrout comm %i %i %i\r", id, out1_flag, out2_flag);
 		}
 		if (err != 0)
 			err_cmd(resp, tcp_buffer, id);

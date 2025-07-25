@@ -24,5 +24,9 @@ bool is_door2_change_level (void);
 bool is_door3_change_level (void);
 bool is_alarm_key (void);
 bool is_alarm_emergency (void);
+void out1_on (void);
+void out1_off (void);
+void out2_on (void);
+void out2_off (void);
 
 #endif // HARDWARE_H

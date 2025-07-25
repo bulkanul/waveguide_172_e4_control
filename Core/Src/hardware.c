@@ -39,3 +39,23 @@ bool is_alarm_emergency (void)
 {
 	return HAL_GPIO_ReadPin (EMERGENCY_GPIO_Port, EMERGENCY_Pin) == GPIO_PIN_RESET;
 }
+
+void out1_on (void)
+{
+	HAL_GPIO_WritePin (OUT1_GPIO_Port, OUT1_Pin, GPIO_PIN_SET);
+}
+
+void out1_off (void)
+{
+	HAL_GPIO_WritePin (OUT1_GPIO_Port, OUT1_Pin, GPIO_PIN_RESET);
+}
+
+void out2_on (void)
+{
+	HAL_GPIO_WritePin (OUT2_GPIO_Port, OUT2_Pin, GPIO_PIN_SET);
+}
+
+void out2_off (void)
+{
+	HAL_GPIO_WritePin (OUT2_GPIO_Port, OUT2_Pin, GPIO_PIN_RESET);
+}

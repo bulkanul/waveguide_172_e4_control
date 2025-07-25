@@ -7,6 +7,7 @@
 #define LAMP_COUNT		(3)
 #define DOOR_COUNT		(3)
 #define BUTTON_COUNT	(3)
+#define OUT_COUNT		(2)
 
 #ifndef __cplusplus
 	#define true 1

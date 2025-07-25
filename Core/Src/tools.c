@@ -224,7 +224,7 @@ void indication_handler(QueueHandle_t* indication_queue,device_struct* mcs){
 		  yellow_led_counter++;
 		}
 
-		osDelay(20);
+		osDelay(10);
 	}
 }
 

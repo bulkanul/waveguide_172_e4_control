@@ -35,6 +35,7 @@ typedef struct {
 	int		lamp[LAMP_COUNT];
 	int		protection_state;
 	int 	buttons[BUTTON_COUNT];
+	int 	out[OUT_COUNT];
 } state_struct;
 
 typedef struct {
