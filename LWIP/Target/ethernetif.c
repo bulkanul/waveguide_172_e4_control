@@ -390,30 +390,12 @@ static err_t low_level_output(struct netif *netif, struct pbuf *p)
 
   pbuf_ref(p);
 
-  do
+  HAL_ETH_Transmit_IT(&heth, &TxConfig);
+  while (osSemaphoreWait(TxPktSemaphore, TIME_WAITING_FOR_INPUT) != osOK)
   {
-    if(HAL_ETH_Transmit_IT(&heth, &TxConfig) == HAL_OK)
-    {
-      errval = ERR_OK;
-    }
-    else
-    {
 
-      if(HAL_ETH_GetError(&heth) & HAL_ETH_ERROR_BUSY)
-      {
-        /* Wait for descriptors to become available */
-        osSemaphoreWait(TxPktSemaphore, ETHIF_TX_TIMEOUT);
-        HAL_ETH_ReleaseTxPacket(&heth);
-        errval = ERR_BUF;
-      }
-      else
-      {
-        /* Other error */
-        pbuf_free(p);
-        errval =  ERR_IF;
-      }
-    }
-  }while(errval == ERR_BUF);
+  }
+  HAL_ETH_ReleaseTxPacket(&heth);
 
   return errval;
 }
