@@ -106,6 +106,8 @@ void common_command(device_struct *mcs, char *resp, char *debug_buffer, char *tc
 			for(int i = 0; i < LAMP_COUNT; i ++)
 				sprintf(resp + strlen(resp), " %i",state->lamp[i]);
 			sprintf(resp + strlen(resp), " %i",state->laser_controller);
+			for(int i = 0; i < BUTTON_COUNT; i ++)
+				sprintf(resp + strlen(resp), " %i",state->buttons[i]);
 			sprintf(resp + strlen(resp), "\r");
 		}
 		else if(cmd("lsrelay comm"))

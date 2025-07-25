@@ -36,13 +36,10 @@ int get_error_state(device_struct* mcs);
 
 void indication_handler(QueueHandle_t* indication_queue,device_struct* mcs);
 
-void handler_tools(device_struct* mcs);
 void handler_alarm(device_struct* mcs);
 
 void protection_err_clr(device_struct *mcs);
 void protection_set_state(state_struct *state, int value);
-
-void init_status(device_struct* mcs);
 
 float abs_f(float c);
 int clear_flash(device_struct* mcs);
@@ -68,5 +65,6 @@ set(interface_in,int)
 #undef get
 #undef set
 
+void handler_buttons (device_struct* mcs);
 
 #endif //TOOLS_DEF

@@ -157,6 +157,18 @@ void handler_alarm(device_struct* mcs){
 #endif
 }
 
+void handler_buttons (device_struct* mcs)
+{
+#ifndef TB_DEF
+	mcs->state.buttons[BUTTON_FL] = is_button_fl_pressed ();
+	mcs->state.buttons[BUTTON_BL] = is_button_bl_pressed ();
+	mcs->state.buttons[BUTTON_PL] = is_button_pl_pressed ();
+#else
+	for (size_t i = 0; i < BUTTON_COUNT; i++)
+		mcs->state.buttons[0] = 0;
+#endif
+}
+
 int get_error_state(device_struct* mcs){
 	int err = 0;
 	alarm_struct *alarm = &mcs->alarms;
@@ -216,12 +228,6 @@ void indication_handler(QueueHandle_t* indication_queue,device_struct* mcs){
 	}
 }
 
-#define TIME_HOT_THRESHOLD 1000
-
-void init_status(device_struct* mcs){
-
-}
-
 float abs_f(float c){
 	return (c >= 0)? c : c*(-1); 
 }
@@ -232,10 +238,6 @@ void err_cmd(char* resp,char* data_in,int id){
 		data_in[1] = 'r';
     sscanf(data_in,"%s %s",cmd,type);
     sprintf(resp,"%s %s %i ERR\r\n",cmd,type,id);
-}
-
-void handler_tools(device_struct* mcs){
-
 }
 
 int check_type_id(char* data_in,char* type,int max_id){

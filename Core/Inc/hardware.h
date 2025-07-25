@@ -4,6 +4,12 @@
 #include <stdbool.h>
 #include "main.h"
 
+enum {
+    BUTTON_FL = 0,
+    BUTTON_BL,
+    BUTTON_PL
+};
+
 bool is_button_fl_pressed (void);
 bool is_button_bl_pressed (void);
 bool is_button_pl_pressed (void);

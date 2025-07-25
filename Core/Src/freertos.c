@@ -252,6 +252,7 @@ void h_tools(void const * argument)
 	/* Infinite loop */
 	for (;;) {
 		handler_alarm(&mcs_storage);
+		handler_buttons (&mcs_storage);
 		osDelay(1);
 	}
   /* USER CODE END h_tools */
