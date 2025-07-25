@@ -1,5 +1,6 @@
 #include "../Inc/commands_handler.h"
 #include "../Inc/gitcommit.h"
+#include "hardware.h"
 
 #ifndef TB_DEF
 GPIO_TypeDef *relay_gpio[RELAY_COUNT] = { RELAY1_GPIO_Port, RELAY2_GPIO_Port, RELAY3_GPIO_Port, RELAY4_GPIO_Port, RELAY5_GPIO_Port };
@@ -153,29 +154,30 @@ void common_command(device_struct *mcs, char *resp, char *debug_buffer, char *tc
 		}
 		else if(cmd("lslasstat comm"))
 		{
-			int value[3] = {0,0,0};
-			rd("lslasstat comm %i %i %i %i\r", &id, &value[0], &value[1], &value[2]);
-			err += (value[0] < 0 || value[0] > 1);
-			err += (value[1] < 0 || value[1] > 1);
-			err += (value[2] < 0 || value[2] > 1);
-			if(!err) {
-//				HAL_GPIO_WritePin(LED_POWER_GPIO_Port,LED_POWER_Pin,value[0]);
-				HAL_GPIO_WritePin(LED_EMISSION_GPIO_Port,LED_EMISSION_Pin,value[1]);
-//				HAL_GPIO_WritePin(lamp_gpio[0],lamp_pin[0],value[1]);
-//				state->lamp[0] = value[1];
-//				HAL_GPIO_WritePin(lamp_gpio[1],lamp_pin[1],value[1]);
-//				state->lamp[1] = value[1];
-				HAL_GPIO_WritePin(LED_ERROR_GPIO_Port,LED_ERROR_Pin,value[2] + get_error_state(mcs));
-//				state->laser_controller = i_val;
+			int leds_state[3] = { 0,0,0 };
+			rd("lslasstat comm %i %i %i %i\r", &id, &leds_state[LED_POWER], &leds_state[LED_EMISSION], &leds_state[LED_ERROR]);
+
+			err += (leds_state[LED_POWER] != 0 && leds_state[LED_POWER] != 1);
+			err += (leds_state[LED_EMISSION] != 0 && leds_state[LED_EMISSION] != 1);
+			err += (leds_state[LED_ERROR] != 0 && leds_state[LED_ERROR] != 1);
+
+			if (err == 0) {
+				HAL_GPIO_WritePin (LED_POWER_GPIO_Port, LED_POWER_Pin, leds_state[LED_POWER] == 0 ? GPIO_PIN_RESET : GPIO_PIN_SET);
+				HAL_GPIO_WritePin (LED_EMISSION_GPIO_Port, LED_EMISSION_Pin, leds_state[LED_EMISSION] == 0 ? GPIO_PIN_RESET : GPIO_PIN_SET);
+				HAL_GPIO_WritePin (LED_ERROR_GPIO_Port, LED_ERROR_Pin, (leds_state[LED_ERROR] + get_error_state (mcs)) == 0 ? GPIO_PIN_RESET : GPIO_PIN_SET);
 			}
-			response("lrlasstat comm %i %i %i %i\r", id, value[0], value[1], value[2]);
+
+			response("lrlasstat comm %i %i %i %i\r", id, leds_state[LED_POWER], leds_state[LED_EMISSION], leds_state[LED_ERROR]);
 		}
 		else if(cmd("lsprot comm"))
 		{
 			rd("lsprot comm %i %i\r", &id, &i_val);
-			err += (i_val < 0 || i_val > 1);
-			if(!err)
+
+			err += (i_val != 0 && i_val != 1);
+
+			if (err == 0)
 				protection_set_state(state, i_val);
+
 			response("lrprot comm %i %i\r", id, i_val);
 		}
 		if (err != 0)

@@ -4,10 +4,16 @@
 #include <stdbool.h>
 #include "main.h"
 
-enum {
+enum buttons_e {
     BUTTON_FL = 0,
     BUTTON_BL,
     BUTTON_PL
+};
+
+enum leds_e {
+    LED_POWER = 0,
+    LED_EMISSION,
+    LED_ERROR
 };
 
 bool is_button_fl_pressed (void);
