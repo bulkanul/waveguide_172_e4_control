@@ -79,10 +79,13 @@ void Error_Handler(void);
 #define RELAY5_GPIO_Port GPIOE
 #define Button_PL_Pin GPIO_PIN_13
 #define Button_PL_GPIO_Port GPIOE
+#define Button_PL_EXTI_IRQn EXTI15_10_IRQn
 #define Button_BL_Pin GPIO_PIN_14
 #define Button_BL_GPIO_Port GPIOE
+#define Button_BL_EXTI_IRQn EXTI15_10_IRQn
 #define Button_FL_Pin GPIO_PIN_15
 #define Button_FL_GPIO_Port GPIOE
+#define Button_FL_EXTI_IRQn EXTI15_10_IRQn
 #define TRIGGER_SCAN_ACT_Pin GPIO_PIN_12
 #define TRIGGER_SCAN_ACT_GPIO_Port GPIOB
 #define LED_POWER_Pin GPIO_PIN_9

@@ -28,5 +28,6 @@ void out1_on (void);
 void out1_off (void);
 void out2_on (void);
 void out2_off (void);
+void buttons_handler (void);
 
 #endif // HARDWARE_H
