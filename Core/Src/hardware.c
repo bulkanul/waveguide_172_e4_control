@@ -36,7 +36,7 @@ void buttons_handler (device_struct *mcs)
 						if(debounced_state[i] != last_debounced_state[i]){
 							xSemaphoreTake(CanMutexHandle,portMAX_DELAY);
 							HAL_GPIO_TogglePin(GPIOC, lamps[i]);
-							mcs->state.lamp[i] = (GPIOC->IDR&lamps[i] != 0) ? 1 : 0;
+							mcs->state.lamp[i] = ((GPIOC->ODR&lamps[i]) != 0)?1:0;
 							xSemaphoreGive(CanMutexHandle);
 						}
 					}
@@ -50,17 +50,17 @@ void buttons_handler (device_struct *mcs)
 
 bool is_button_fl_pressed (void)
 {
-    return last_debounced_state[0];
+    return debounced_state[0];
 }
 
 bool is_button_bl_pressed (void)
 {
-	return last_debounced_state[1];
+	return debounced_state[1];
 }
 
 bool is_button_pl_pressed (void)
 {
-	return last_debounced_state[2];
+	return debounced_state[2];
 }
 
 bool is_door1_change_level (void)
