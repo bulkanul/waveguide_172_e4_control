@@ -8,11 +8,17 @@
 static GPIO_PinState stable_state[BUTTONS_COUNT];
 static uint16_t pins[BUTTONS_COUNT] = {Button_FL_Pin, Button_BL_Pin, Button_PL_Pin};
 static bool is_pressed_button[BUTTONS_COUNT] = {false, false, false};
+static TickType_t xStartTime = 0;
+
+void buttons_init (void)
+{
+	xStartTime = xTaskGetTickCount();
+}
 
 void buttons_handler (void)
 {
 	const uint32_t DELAY_IN_MS = 20;
-	TickType_t xStartTime = xTaskGetTickCount();
+
 	if ((xTaskGetTickCount() - xStartTime) >= pdMS_TO_TICKS(DELAY_IN_MS)) {
 		for (size_t i = 0; i < BUTTONS_COUNT; i++) {
 			GPIO_PinState new_state = HAL_GPIO_ReadPin(GPIOE, pins[i]);
