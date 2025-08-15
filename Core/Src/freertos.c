@@ -249,7 +249,6 @@ void h_server_task(void const * argument)
 void h_tools(void const * argument)
 {
   /* USER CODE BEGIN h_tools */
-	buttons_init ();
 	/* Infinite loop */
 	for (;;) {
 		handler_alarm(&mcs_storage);
