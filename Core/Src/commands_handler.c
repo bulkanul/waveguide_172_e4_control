@@ -32,9 +32,9 @@ void common_command(device_struct *mcs, char *resp, char *debug_buffer, char *tc
 	if (cmd("console")){
 		set_console_mode(!get_console_mode());
 		if (get_console_mode())
-			response("Console mode ON\r\n");
+			response("lConsole mode ON\r\n");
 		else
-			response("Console mode OFF\r\n");
+			response("lConsole mode OFF\r\n");
 	}
 	else if (cmd("lgvers"))
 		response("lrvers %s", PROTOCOL_VERSION);
