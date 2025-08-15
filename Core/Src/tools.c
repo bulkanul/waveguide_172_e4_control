@@ -159,7 +159,7 @@ void handler_alarm(device_struct* mcs){
 
 void handler_buttons (device_struct* mcs)
 {
-	buttons_handler ();
+	buttons_handler (mcs);
 #ifndef TB_DEF
 	mcs->state.buttons[BUTTON_FL] = is_button_fl_pressed ();
 	mcs->state.buttons[BUTTON_BL] = is_button_bl_pressed ();

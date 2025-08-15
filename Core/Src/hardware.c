@@ -4,6 +4,7 @@
 #include "task.h"
 
 #include "setting_project.h"
+#include "cmsis_os.h"
 
 static uint16_t pins[BUTTON_COUNT] = {Button_FL_Pin, Button_BL_Pin, Button_PL_Pin};
 static uint16_t lamps[LAMP_COUNT] = {Lamp_FL_Pin, Lamp_BL_Pin, Lamp_PL_Pin};
@@ -14,7 +15,9 @@ static GPIO_PinState last_debounced_state[BUTTON_COUNT] = {GPIO_PIN_RESET, GPIO_
 static TickType_t debounce_start_tick = 0;
 static int btn_pending = 0;
 
-void buttons_handler (void)
+extern osMutexId CanMutexHandle;
+
+void buttons_handler (device_struct *mcs)
 {
 	const uint32_t DELAY_IN_MS = 50;
 	TickType_t current_time = xTaskGetTickCount();
@@ -30,8 +33,12 @@ void buttons_handler (void)
 					debounced_state[i] = new_state;
 					if(debounced_state[i] == GPIO_PIN_SET)
 					{
-						if(debounced_state[i] != last_debounced_state[i])
+						if(debounced_state[i] != last_debounced_state[i]){
+							xSemaphoreTake(CanMutexHandle,portMAX_DELAY);
 							HAL_GPIO_TogglePin(GPIOC, lamps[i]);
+							mcs->state.lamp[i] = (GPIOC->IDR&lamps[i] != 0) ? 1 : 0;
+							xSemaphoreGive(CanMutexHandle);
+						}
 					}
 					last_debounced_state[i] = debounced_state[i];
 				}

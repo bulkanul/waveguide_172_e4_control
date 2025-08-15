@@ -3,6 +3,7 @@
 
 #include <stdbool.h>
 #include "main.h"
+#include "global.h"
 
 enum buttons_e {
     BUTTON_FL = 0,
@@ -29,6 +30,6 @@ void out1_off (void);
 void out2_on (void);
 void out2_off (void);
 void buttons_init (void);
-void buttons_handler (void);
+void buttons_handler (device_struct*);
 
 #endif // HARDWARE_H

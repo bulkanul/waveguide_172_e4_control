@@ -10,6 +10,8 @@ GPIO_TypeDef *lamp_gpio[LAMP_COUNT] = { Lamp_FL_GPIO_Port, Lamp_BL_GPIO_Port, La
 uint16_t lamp_pin[LAMP_COUNT] = { Lamp_FL_Pin, Lamp_BL_Pin, Lamp_PL_Pin };
 #endif
 
+extern osMutexId CanMutexHandle;
+
 static void common_command(device_struct *mcs, char *resp, char *debug_buffer, char *tcp_buffer, int i);
 
 void CommandsHandler(device_struct *mcs, char *resp, char *debug_buffer, char *tcp_buffer, int i)
@@ -135,8 +137,10 @@ void common_command(device_struct *mcs, char *resp, char *debug_buffer, char *tc
 			err += (i_val != 0 && i_val != 1);
 
 			if (err == 0) {
+				xSemaphoreTake(CanMutexHandle,portMAX_DELAY);
 				HAL_GPIO_WritePin (lamp_gpio[index], lamp_pin[index], i_val == 0 ? GPIO_PIN_RESET : GPIO_PIN_SET);
 				state->lamp[index] = i_val;
+				xSemaphoreGive(CanMutexHandle);
 			}
 
 			response("lrlamp comm %i %i %i\r", id, index, i_val);
