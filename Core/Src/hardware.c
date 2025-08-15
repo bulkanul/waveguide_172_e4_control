@@ -1,5 +1,8 @@
 #include "hardware.h"
 
+#include "FreeRTOS.h"
+#include "task.h"
+
 #define BUTTONS_COUNT (3)
 
 static GPIO_PinState stable_state[BUTTONS_COUNT];
@@ -8,12 +11,17 @@ static bool is_pressed_button[BUTTONS_COUNT] = {false, false, false};
 
 void buttons_handler (void)
 {
-	for (size_t i = 0; i < BUTTONS_COUNT; i++) {
-		GPIO_PinState new_state = HAL_GPIO_ReadPin(GPIOE, pins[i]);
-		if (new_state != stable_state[i]) {
-			stable_state[i] = new_state;
-			is_pressed_button[i] = true;
+	const uint32_t DELAY_IN_MS = 20;
+	TickType_t xStartTime = xTaskGetTickCount();
+	if ((xTaskGetTickCount() - xStartTime) >= pdMS_TO_TICKS(DELAY_IN_MS)) {
+		for (size_t i = 0; i < BUTTONS_COUNT; i++) {
+			GPIO_PinState new_state = HAL_GPIO_ReadPin(GPIOE, pins[i]);
+			if (new_state != stable_state[i]) {
+				stable_state[i] = new_state;
+				is_pressed_button[i] = true;
+			}
 		}
+		xStartTime = xTaskGetTickCount();
 	}
 }
 
