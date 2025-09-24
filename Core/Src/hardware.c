@@ -6,6 +6,9 @@
 #include "setting_project.h"
 #include "cmsis_os.h"
 
+GPIO_TypeDef* 	corresponding_relays_gpio[] = {RELAY1_GPIO_Port,RELAY3_GPIO_Port,RELAY5_GPIO_Port};
+uint32_t 		corresponding_relays_pin[] = {RELAY1_Pin,RELAY3_Pin,RELAY5_Pin};
+
 static uint16_t pins[BUTTON_COUNT] = {Button_FL_Pin, Button_BL_Pin, Button_PL_Pin};
 static uint16_t lamps[LAMP_COUNT] = {Lamp_FL_Pin, Lamp_BL_Pin, Lamp_PL_Pin};
 
@@ -36,6 +39,8 @@ void buttons_handler (device_struct *mcs)
 						if(debounced_state[i] != last_debounced_state[i]){
 							xSemaphoreTake(CanMutexHandle,portMAX_DELAY);
 							HAL_GPIO_TogglePin(GPIOC, lamps[i]);
+							HAL_GPIO_TogglePin(corresponding_relays_gpio[i], corresponding_relays_pin[i]);
+							mcs->state.relay[i] = ((corresponding_relays_gpio[i]->ODR&corresponding_relays_pin[i]) != 0)?1:0;
 							mcs->state.lamp[i] = ((GPIOC->ODR&lamps[i]) != 0)?1:0;
 							xSemaphoreGive(CanMutexHandle);
 						}
