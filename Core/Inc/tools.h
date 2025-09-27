@@ -33,7 +33,8 @@ void reset_err(alarm_struct* alarm);
 void err_cmd(char* resp,char* data_in,int id);
 int check_type_id(char* data_in,char* type,int max_id);
 int get_error_state(device_struct* mcs);
-
+void get_emission(device_struct* mcs);
+void set_emission_leds(int emission);
 void indication_handler(QueueHandle_t* indication_queue,device_struct* mcs);
 
 void handler_alarm(device_struct* mcs);

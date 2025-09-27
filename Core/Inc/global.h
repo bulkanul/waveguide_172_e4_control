@@ -30,6 +30,7 @@ typedef struct {
 } alarm_struct;
 
 typedef struct {
+	int		emission;
 	int		laser_controller;
 	int		relay[RELAY_COUNT];
 	int		lamp[LAMP_COUNT];

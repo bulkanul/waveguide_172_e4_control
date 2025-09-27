@@ -59,9 +59,6 @@ void MX_GPIO_Init(void)
                           |RELAY5_Pin, GPIO_PIN_RESET);
 
   /*Configure GPIO pin Output Level */
-  HAL_GPIO_WritePin(TRIGGER_SCAN_ACT_GPIO_Port, TRIGGER_SCAN_ACT_Pin, GPIO_PIN_RESET);
-
-  /*Configure GPIO pin Output Level */
   HAL_GPIO_WritePin(GPIOD, LED_POWER_Pin|LED_EMISSION_Pin|LED_ERROR_Pin|OUT1_Pin
                           |OUT2_Pin|LED_YELLOW_Pin|LED_GREEN_Pin|PROTECTION_ONOFF_Pin, GPIO_PIN_RESET);
 
@@ -91,12 +88,11 @@ void MX_GPIO_Init(void)
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   HAL_GPIO_Init(GPIOE, &GPIO_InitStruct);
 
-  /*Configure GPIO pin : TRIGGER_SCAN_ACT_Pin */
-  GPIO_InitStruct.Pin = TRIGGER_SCAN_ACT_Pin;
-  GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
+  /*Configure GPIO pin : EMISSION_IN_EX_TRIGGER_SCAN_ACT_Pin */
+  GPIO_InitStruct.Pin = EMISSION_IN_EX_TRIGGER_SCAN_ACT_Pin;
+  GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
-  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
-  HAL_GPIO_Init(TRIGGER_SCAN_ACT_GPIO_Port, &GPIO_InitStruct);
+  HAL_GPIO_Init(EMISSION_IN_EX_TRIGGER_SCAN_ACT_GPIO_Port, &GPIO_InitStruct);
 
   /*Configure GPIO pins : LED_POWER_Pin LED_EMISSION_Pin LED_ERROR_Pin OUT1_Pin
                            OUT2_Pin LED_YELLOW_Pin LED_GREEN_Pin PROTECTION_ONOFF_Pin */

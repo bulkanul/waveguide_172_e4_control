@@ -253,6 +253,8 @@ void h_tools(void const * argument)
 	for (;;) {
 		handler_alarm(&mcs_storage);
 		handler_buttons (&mcs_storage);
+		get_emission(&mcs_storage);
+		set_emission_leds(mcs_storage.state.emission);
 		osDelay(1);
 	}
   /* USER CODE END h_tools */

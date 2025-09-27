@@ -86,8 +86,8 @@ void Error_Handler(void);
 #define Button_FL_Pin GPIO_PIN_15
 #define Button_FL_GPIO_Port GPIOE
 #define Button_FL_EXTI_IRQn EXTI15_10_IRQn
-#define TRIGGER_SCAN_ACT_Pin GPIO_PIN_12
-#define TRIGGER_SCAN_ACT_GPIO_Port GPIOB
+#define EMISSION_IN_EX_TRIGGER_SCAN_ACT_Pin GPIO_PIN_12
+#define EMISSION_IN_EX_TRIGGER_SCAN_ACT_GPIO_Port GPIOB
 #define LED_POWER_Pin GPIO_PIN_9
 #define LED_POWER_GPIO_Port GPIOD
 #define LED_EMISSION_Pin GPIO_PIN_10

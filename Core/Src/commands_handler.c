@@ -145,19 +145,6 @@ void common_command(device_struct *mcs, char *resp, char *debug_buffer, char *tc
 
 			response("lrlamp comm %i %i %i\r", id, index, i_val);
 		}
-		else if(cmd("lslaser comm"))
-		{
-			rd("lslaser comm %i %i\r", &id, &i_val);
-
-			err += (i_val != 0 && i_val != 1);
-
-			if(err == 0) {
-				HAL_GPIO_WritePin (TRIGGER_SCAN_ACT_GPIO_Port, TRIGGER_SCAN_ACT_Pin, i_val == 0 ? GPIO_PIN_RESET : GPIO_PIN_SET);
-				state->laser_controller = i_val;
-			}
-
-			response("lrlaser comm %i %i\r", id, i_val);
-		}
 		else if(cmd("lslasstat comm"))
 		{
 			int leds_state[3] = { 0,0,0 };

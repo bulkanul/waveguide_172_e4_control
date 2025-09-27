@@ -141,6 +141,17 @@ int door_index = 0;
 int door[DOOR_COUNT];
 #endif
 
+void get_emission(device_struct* mcs)
+{
+	mcs->state.emission = (EMISSION_IN_EX_TRIGGER_SCAN_ACT_GPIO_Port->IDR!=GPIO_PIN_RESET?1:0);
+}
+
+void set_emission_leds(int emission)
+{
+	HAL_GPIO_WritePin(LED_EMISSION_GPIO_Port, LED_EMISSION_Pin, emission);
+	HAL_GPIO_WritePin(RELAY2_GPIO_Port, RELAY2_Pin, emission);
+}
+
 void handler_alarm(device_struct* mcs){
 	alarm_struct *alarm = &mcs->alarms;
 #ifndef TB_DEF
